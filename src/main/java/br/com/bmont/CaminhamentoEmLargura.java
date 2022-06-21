@@ -1,13 +1,14 @@
 package br.com.bmont;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class CaminhamentoEmLargura {
     private String maiusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private String minusculas = "abcdefghijklmnopqrstuvwxyz";
     private Grafo grafo;
-    private ArrayList<Vertice> marcados = new ArrayList<Vertice>();
     ArrayList<Vertice> chaves = new ArrayList<Vertice>();
     ArrayList<Vertice> portas = new ArrayList<Vertice>();
 
@@ -16,38 +17,37 @@ public class CaminhamentoEmLargura {
     }
 
     public void busca(Vertice inicial) {
-        ArrayList<Vertice> fila = new ArrayList<Vertice>();
-        Vertice atual = inicial;
-        marcados.add(atual);
-        fila.add(atual);
-        while (fila.size() > 0) {
-            Vertice visitado = fila.get(0);
-
-            for (int i = 0; i < visitado.getAdjacentes().size(); i++) {
-                Vertice proximo = visitado.getAdjacentes().get(i);
-                if (!marcados.contains(proximo)){
-                    if (isPorta(proximo) && !isPermitido(proximo)) {
-                        portas.add(proximo);
-                    }else if (isPorta(proximo) && isPermitido(proximo)){
-                        portas.add(proximo);
-                        marcados.add(proximo);
-                        fila.add(proximo);
+        Queue<Vertice> fila = new LinkedList<>();
+        inicial.setMarcado(true);
+        fila.add(inicial);
+        int i = 1;
+        while (!fila.isEmpty()) {
+            Vertice atual = fila.poll();
+            for (Vertice vertice : atual.getAdjacentes()) {
+                if (!vertice.isMarcado()){
+                    if (isPorta(vertice) && !isPermitido(vertice)) {
+                        portas.add(vertice);
+                    }else if (isPorta(vertice) && isPermitido(vertice)){
+                        portas.add(vertice);
+                        vertice.setMarcado(true);
+                        i++;
+                        fila.add(vertice);
                     } else {
-                        if (isChave(proximo)){
-                            List<Vertice> v = hasPorta(proximo);
+                        if (isChave(vertice)){
+                            List<Vertice> v = hasPorta(vertice);
                             if (!v.isEmpty()){
                                 fila.addAll(v);
                             }
-                            chaves.add(proximo);
+                            chaves.add(vertice);
                         }
-                        marcados.add(proximo);
-                        fila.add(proximo);
+                        vertice.setMarcado(true);
+                        i++;
+                        fila.add(vertice);
                     }
                 }
             }
-            fila.remove(0);
         }
-        System.out.println(marcados.size());
+        System.out.println(i);
     }
 
     private boolean isChave(Vertice v) {

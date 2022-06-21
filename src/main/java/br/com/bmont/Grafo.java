@@ -20,13 +20,14 @@ public class Grafo {
         return vertices;
     }
 
-    public void addAdjacente(Vertice v, int larguraCenario) {
+    public void addAdjacente(Vertice v,  int posicaoX, int posicaoY, int larguraCenario) {
         if (isParede(v)){
             return;
         }
-        int posicao = (v.getPosicaoY() - 1) * larguraCenario + v.getPosicaoX() - 1;
+        int posicao = posicaoY * larguraCenario + posicaoX;
 
-        if (v.getPosicaoY() != 1) {
+        // adiciona aresta entro o vertice recebido por parametro e o vertice acima dele
+        if (posicaoY != 0) {
             Vertice superior = vertices.get(posicao - larguraCenario);
             if (!isParede(superior)) {
                 v.addAdjacente(superior);
@@ -34,8 +35,8 @@ public class Grafo {
                 arestasSize += 2;
             }
         }
-
-        if (v.getPosicaoX() != 1) {
+        // adiciona aresta entro o vertice recebido por parametro e o vertice a esquerda dele
+        if (posicaoX != 0) {
             Vertice esquerda = vertices.get(posicao - 1);
             if (!isParede(esquerda)) {
                 v.addAdjacente(esquerda);

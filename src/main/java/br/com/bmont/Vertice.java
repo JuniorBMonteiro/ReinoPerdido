@@ -4,23 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Vertice {
-    private int posicaoX;
-    private int posicaoY;
     private char valor;
     private List<Vertice> adjacentes;
+    private boolean isMarcado;
 
-    public Vertice(int posicaoX, int posicaoY, char valor) {
-        this.posicaoX = posicaoX;
-        this.posicaoY = posicaoY;
+    public Vertice(char valor) {
         this.valor = valor;
         this.adjacentes = new ArrayList<>();
+        this.isMarcado = false;
     }
 
-    public int getPosicaoX() {
-        return posicaoX;
+    public boolean isMarcado() {
+        return isMarcado;
     }
-    public int getPosicaoY() {
-        return posicaoY;
+
+    public void setMarcado(boolean marcado) {
+        this.isMarcado = marcado;
     }
 
     public char getValor() {

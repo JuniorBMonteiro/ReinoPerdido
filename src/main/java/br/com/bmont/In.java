@@ -19,27 +19,21 @@ public class In {
         Path path = Paths.get(filePath);
         try (BufferedReader reader = Files.newBufferedReader(path, Charset.defaultCharset())) {
             String line = null;
-            int posicaoX = 1;
-            int posicaoY = 1;
+            int posicaoX = 0;
+            int posicaoY = 0;
             while ((line = reader.readLine()) != null) {
                 for (int i = 0; i < line.length(); i++) {
                     char valor = line.charAt(i);
-                    Vertice vertice = new Vertice(posicaoX, posicaoY, valor);
+                    Vertice vertice = new Vertice(valor);
                     grafo.addVertice(vertice);
+                    grafo.addAdjacente(vertice, posicaoX, posicaoY, line.length());
                     posicaoX++;
                 }
-                if (posicaoX != 1){
-                    larguraCenario = posicaoX-1;
-                }
-                posicaoX = 1;
+                posicaoX = 0;
                 posicaoY++;
             }
         }catch (IOException e) {
             System.err.format("Erro na leitura do arquivo: ", e);
         }
-    }
-
-    public void a(){
-        grafo.getVertices().forEach(v -> grafo.addAdjacente(v, larguraCenario));
     }
 }
